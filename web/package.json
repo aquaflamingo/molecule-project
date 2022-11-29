@@ -1,5 +1,5 @@
 {
-  "name": "molecule",
+  "name": "@molecule/web",
   "version": "0.1.0",
   "dependencies": {
     "@web3-react/core": "^6.1.9",
