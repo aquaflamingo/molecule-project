@@ -15,5 +15,5 @@ hh.node:
 hh.compile:
 	@pushd blockchain; yarn compile; popd
 
-hh.deploy:
-	@pushd blockchain; yarn deploy; popd
+hh.deploy.local:
+	@pushd blockchain; yarn deploy:local; popd

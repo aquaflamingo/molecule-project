@@ -5,3 +5,4 @@ artifacts
 */deployments/localhost/*
 *.log
 node_modules
+.devlogs
