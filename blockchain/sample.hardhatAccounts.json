@@ -1,0 +1,11 @@
+{
+  "hdWallet": {
+    "path": "m/44'/60'/0'/0",
+    "mnemonic": "<your-mnemonic-goes-here>",
+    "initialIndex": 0,
+    "count": 5,
+    "passphrase": "<your-password-here>",
+    "accountsBalance": "1100000000000000000000"
+  }
+}
+

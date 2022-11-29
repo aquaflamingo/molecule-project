@@ -4,11 +4,11 @@ import { Web3Provider as EthersJsProvider } from "@ethersproject/providers";
 
 export const useEthersJs = () => {
   const { active, connector } = useWeb3React();
-  const [ethersjsInstance, setEthersJs] = useState(null);
+  const [ethersjsInstance, setEthersJs] = useState<EthersJsProvider>();
 
   useEffect(() => {
     connector?.getProvider().then((provider) => {
-      const instance = new EthersJsProvider(provider);
+      const instance : EthersJsProvider = new EthersJsProvider(provider);
       setEthersJs(instance);
     });
   }, [active, connector]);
@@ -18,7 +18,7 @@ export const useEthersJs = () => {
 
 export const useETHAccounts = () => {
   const ethersjsInstance = useEthersJs();
-  const [accounts, setAccounts] = useState([]);
+  const [accounts, setAccounts] = useState<Array<string>>([]);
 
   useEffect(() => {
     if (ethersjsInstance === null) {
@@ -26,7 +26,7 @@ export const useETHAccounts = () => {
     }
 
     ethersjsInstance
-      .listAccounts()
+      ?.listAccounts()
       .then((accounts) => {
         setAccounts(accounts);
       })
