@@ -11,9 +11,7 @@ contract Patent is ERC721URIStorage, Ownable {
     Counters.Counter private _tokenIds;
     mapping(address => bool) public brightlist;
 
-    constructor() ERC721("Patent", "PAT") public {
-
-    }
+    constructor() ERC721("Patent", "PAT") {}
 
     /**
      * @notice Add to brightlist
@@ -37,18 +35,16 @@ contract Patent is ERC721URIStorage, Ownable {
         }
     }
 
-    /**
-     * @notice Function with brightlist
-     */
-    function _validate() 
-		external
-    {
+		/** 
+		 * @notice ensures brightlisting
+		 */
+		modifier onlyBrightlisted() 
+		{
         require(brightlist[msg.sender], "NOT_IN_BRIGHTLIST");
-    }
+				_;
+		}
 
-    function mint(address who, string memory tokenURI) public returns (uint256) {
-				_validate();
-
+    function mint(address who, string memory tokenURI) public onlyBrightlisted returns (uint256) {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(who, newItemId);

@@ -8,7 +8,7 @@
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.3",
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "ethers": "^5.4.1",
     "hardhat": "^2.4.1",
     "hardhat-deploy": "^0.8.11",
@@ -20,11 +20,13 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
     "@openzeppelin/contracts": "^4.7.3"
   },
   "scripts": {
-    "start:node": "npx hardhat node",
     "compile": "npx hardhat compile",
+    "start:node": "npx hardhat node",
+    "test": "npx hardhat test --network localhost",
     "deploy:local": "npx hardhat run scripts/001_deploy_patents.ts --network localhost"
   }
 }
