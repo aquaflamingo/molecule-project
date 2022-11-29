@@ -1,0 +1,7 @@
+node_modules
+tmp
+cache
+artifacts
+*/deployments/localhost/*
+*.log
+node_modules

@@ -1,0 +1,24 @@
+{
+  "name": "@web3-app-scaffold/blockchain",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.1",
+    "hardhat": "^2.4.1",
+    "hardhat-deploy": "^0.8.11",
+    "hardhat-deploy-ethers": "^0.3.0-beta.10"
+  },
+	"config": {
+		 "CONTRACT_EXPORT": "../lib/contracts/index.json"
+	},
+	"scripts": {
+		 "start:node": "npx hardhat node --no-deploy",
+		 "compile": "npx hardhat compile",
+		 "deploy": "npx hardhat deploy --network localhost --export $npm_package_config_CONTRACT_EXPORT",
+		 "listAccounts": "npx hardhat --network localhost accounts"
+	}
+}
