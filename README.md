@@ -1,95 +1,119 @@
-# Web3 Application Scaffold
-> Ethereum is v srs bzns.
+# Molecule Project
+## Scope
+Unfortunately, the full scope of the project was not completed in the set amount of time. Below is a listing of what exactly works and what doesn't.
 
-A basic scaffolding template for getting started building Web3 Applications (DApps) using Hardhat, web3-react and hardhat-deploys. Basically, setting up a development environment for `CMD + C CMD + V` driven development.
+### Working 
+- ERC721 contract 
+	- add and remove from brightlist 
+- React application with Web3 provider injected 
+- Minting Form enforces schema for payload
+- Payload is encrypted, stores key in local storage and displays to end user
+- Encrypted payload is uploaded to IPFS 
 
-This scaffolding template separates web client from the blockchain development. This create an developer environment where work can be parallelized if needed and separated between developers. It does have some drawbacks / annoyances (e.g. sharing compiled contract ABI between apps, two separate sets of `node_modules` and `package.json` dependencies), but, overall makes things a bit cleaner.
+### Did not finish
+- Getting a token to be minted with the `metadata.json`
+- Completing the brightlisting form for the app to allow you to submit requests to remove and add addresses to the bright list
+- Enforcement of only 1 NFT minted at a time
+	- This is a trivial addition on the contract's part (just deleting the address from the brightlist once you complete the mint)
+- The `tokenURI` request does not fit the schema exactly, I could not figure out how to get the token ID in the metadata that is stored in the token before the token was minted 
+- The system is not deployed to a public URL or on Goerli
 
-When you compile and deploy your Hardhat contracts, the compiled ABI is stored in the shared root `lib` project, which using `npm` or `yarn` package `link`s you can import into your web client as needed. This allows you, should you choose to accept your adventure, compile and deploy hardhat contract, then deploy result contract library to an internal NPM registry and pull it down in your web client.
+### Additional Tasks 
+- Complete the missing functionality 
+- Clean up the types usage to improve code quality
+- Deploy the system to goerli and on a public hosting provider like heroku or aws 
 
-## Create private keys
-Before you can actually use your application you need to setup some Ethereum accounts. The `blockchain` project is setup to read from a local file `hardhatAccounts.json` containing preset private keys and balances.
+## Structure
+There are two separate top level projects here:
+
+* blockchain: a hardhat environment for developing contracts which exports artifact ABI and deployment information directly into the `web` source directory
+* web: the web client for interacting the on chain
+
+## Getting Stated 
+The basic flow to run the app at a high level is the following:
+- Go to the blockchain module
+- Add your local testing HD Wallet
+- Install deps for `blockchain`
+- Run the hardhat node in one terminal
+- Deploy your contracts to the hardhat node locally 
+	- This will cause the artifacts to be written over to the web client directory
+- Now you need to setup IPFS locally (aka `--offline` mode)
+	- Start the local daemon in another terminal window
+- Once you have the node running you can move over to the webclient
+- Install deps
+- Run the web application
+- Connect your wallet and you should be good
+
+### IPFS 
+#### Install 
+You can install IPFS via `go` 
+
+There is a script called `ipfsd.sh` in the root directory that runs an IPFS daemon in `--offline` mode. You can also run the recipe:
+
+```
+make ipfs.start
+```
+
+You can then use the `ipfs` CLI to `cat`, `add`, et cetera as needed. 
+
+### Blockchain
+#### Create an HD wallet for testing and add to the blockchain project
+Before you can use the blockchain application you need to setup some Ethereum accounts. The `blockchain` project is setup to read from a local file `hardhatAccounts.dev.json` containing preset private keys and balances.
 
 ```javascript
 {
-	 "accounts": [
-			{
-				 "address": "addressHere", 
-				 "privateKey": "privateKey",
-				 "balance": "10000000000000000000000"
-			}
-	 ]
+  "hdWallet": {
+    "path": "m/44'/60'/0'/0",
+    "mnemonic": "<your-mnemonic-goes-here>",
+    "initialIndex": 0,
+    "count": 5,
+    "passphrase": "<your-password-here>",
+    "accountsBalance": "1100000000000000000000"
+  }
 }
 ```
 
-You can do this via Metamask. 
+There is a `hardhatAccounts.sample.json` file available for which you can reference as well to create your own.
+
+To get a new mnemonic you can set up via Metamask or Coinbase Wallet.
 
 > **NOTE** Make sure you setup MetaMask to use the Hardhat network (custom RPC via 31337) before hand.
 
 MetaMask > Create Account > Copy private + Address
 
-Add Private Key and Address information to `hardhatAccounts.json`. Hardhat will read from this file and initialize the local development environment using this information. In other words, the "owner" of a deployed contract will be one of these accounts.
-
-## Setup 
-You will need to `cd` into the directories and grab node modules:
-```bash
-cd blockchain
-
-yarn
+#### Getting Setup
+Install dependencies 
 ```
-
-Download web modules
-```bash
-cd web
-
-yarn
+cd blockchain 
+yarn 
 ```
+Once dependencies are installed you can run a few different recipes from the `Makefile` at the directory root (i.e. `cd ../`)
 
-Finally, we need to create a local `yarn` link for the shared `@web3-app-scaffolding/contracts` package which will contain the compiled contract code.
-
-```bash
-cd lib
-
-# Register the shared `lib` package for usage with other local clients
-yarn link
-
-# yarn link v1.9.2
-# success Registered "@web3-app-scaffold/contracts"
-# info You can now run `yarn link "@web3-app-scaffold/contracts"` in the projects where you want to use this project and it will be used instead.
+#### Running a Node
 ```
-
-Now back to the web client:
-```bash
-cd web
-
-yarn link "@web3-app-scaffold/contracts"
-```
-
-Now that the `@web3-app-scaffolding/contracts` package is registered, we can access the contract ABI in the web client via `import`.
-
-```javascript
-import Artifacts from "@web3-app-scaffold/contracts";
-const Greeter = Artifacts.contracts.Greeter;
-```
-
-## Usage
-After cloning and setting up the repository you can use the `Makefile` targets to get up and running.
-
-Starting hardhat and deploying contracts
-```bash
-# Starts a localhost instance of the Hardhat network
 make hh.node
-
-# Compiles and deploys your hardhat contracts
-# note that by default your compiled contracts will be
-# stored in the directory lib/contracts/index.json
-make hh.deploy
-
-# Finally, we can start the webclient
-make web.start
-
-# Navigate to localhost:3000 and hopefully things worked 😃
 ```
+
+#### Compiling the contracts and deploying
+```
+make hh.deploy local
+```
+
+Unfortunately, the contracts are not deployed to Goerli or any testnet at this time
+
+### Web
+#### Getting Setup
+To run the webclient you will need to ensure that you have Meta Mask installed
+```
+yarn 
+```
+
+You can then run the application via:
+```
+yarn start
+```
+
+It should start on port `3000`
 
 ## License
 This repository is licensed under [MIT Open Source](https://opensource.org/licenses/MIT)

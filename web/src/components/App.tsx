@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useETHAccounts } from "../hooks/useEthers";
 import MintForm from "./MintForm"
+import BrightlistForm from "./BrightlistForm"
 import { Container } from "react-bootstrap" 
 
 function App() {
@@ -15,6 +16,10 @@ function App() {
 		setKey(mintResult.encryptionKey)
 	}
 
+	const onBrightlistSuccess = () => {
+
+	}
+
 	const handleCopy = () => {
 		navigator.clipboard.writeText(key)
 		alert("Copied")
@@ -24,8 +29,10 @@ function App() {
 		<Container>
 			<div className="Web3App">
 				 <main>
-					{ account ? account : <p> No account </p> }
+					Your account: { account ? account : <p> No account </p> }
+
 					<MintForm onSuccess={onSuccess} />
+					<BrightlistForm onSuccess={onBrightlistSuccess} />
 
 					{ success ? 
 						<div>

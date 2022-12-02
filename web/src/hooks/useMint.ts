@@ -8,7 +8,7 @@ import Patent from "../artifacts/contracts/Patent.sol/Patent.json";
 import PatentDeployment from "../artifacts/deploy.json";
 import { encrypt, generateSecret } from "../helpers/crypto";
 
-const useContract = () => {
+export const useContract = () => {
   const ethersjsInstance = useEthersJs();
   const [contract, setContract] = useState<Contract>();
 
