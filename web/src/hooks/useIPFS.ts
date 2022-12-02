@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { create as CreateIPFSClient, HTTPClientExtraOptions, IPFSHTTPClient} from "ipfs-http-client";
+import {
+  create as CreateIPFSClient,
+  HTTPClientExtraOptions,
+  IPFSHTTPClient,
+} from "ipfs-http-client";
 import config from "../config";
 import { ensureIPFSPrefix } from "../helpers/ipfs";
 
@@ -20,39 +24,44 @@ export const useIPFS = () => {
 };
 
 export const useIPFSContentUpload = () => {
-	const ipfs = useIPFS()
+  const ipfs = useIPFS();
 
-  const upload = useCallback(async (data : any) => {
-    console.log("useIPFSContentUpload called with:", data);
+  const upload = useCallback(
+    async (data: any) => {
+      console.log("useIPFSContentUpload called with:", data);
 
-		const importCandidate = { 
-				path: "/nft/" + data.basename, 
-				content: data.content
-			}
+      const importCandidate = {
+        path: "/nft/" + data.basename,
+        content: data.content,
+      };
 
-    const { cid: assetCid } = await ipfs!.add(
-			importCandidate,
-			IPFS_ADD_OPTIONS as HTTPClientExtraOptions
-    );
+      const { cid: assetCid } = await ipfs!.add(
+        importCandidate,
+        IPFS_ADD_OPTIONS as HTTPClientExtraOptions
+      );
 
-		console.log("Added asset to ipfs", assetCid) 
+      console.log("Added asset to ipfs", assetCid);
 
-    // Create the NFT metadata JSON
-    const assetURI = ensureIPFSPrefix(assetCid.toString()) + "/" + data.basename;
-    const metadata = { ...data.metadata, uri: assetURI };
+      // Create the NFT metadata JSON
+      const assetURI =
+        ensureIPFSPrefix(assetCid.toString()) + "/" + data.basename;
+      const metadata = { ...data.metadata, uri: assetURI };
 
-    // add the metadata to IPFS
-    const { cid: metadataCid } = await ipfs!.add(
-      { path: "/nft/metadata.json", content: JSON.stringify(metadata) },
-      IPFS_ADD_OPTIONS as HTTPClientExtraOptions
-    );
-    const metadataURI = ensureIPFSPrefix(metadataCid.toString()) + "/metadata.json";
+      // add the metadata to IPFS
+      const { cid: metadataCid } = await ipfs!.add(
+        { path: "/nft/metadata.json", content: JSON.stringify(metadata) },
+        IPFS_ADD_OPTIONS as HTTPClientExtraOptions
+      );
+      const metadataURI =
+        ensureIPFSPrefix(metadataCid.toString()) + "/metadata.json";
 
-    return {
-      metadataURI: metadataURI,
-      assetURI: assetURI,
-    };
-  }, [ipfs]);
+      return {
+        metadataURI: metadataURI,
+        assetURI: assetURI,
+      };
+    },
+    [ipfs]
+  );
 
   return upload;
 };

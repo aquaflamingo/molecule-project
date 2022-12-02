@@ -8,7 +8,7 @@ export const useEthersJs = () => {
 
   useEffect(() => {
     connector?.getProvider().then((provider) => {
-      const instance : EthersJsProvider = new EthersJsProvider(provider);
+      const instance: EthersJsProvider = new EthersJsProvider(provider);
       setEthersJs(instance);
     });
   }, [active, connector]);

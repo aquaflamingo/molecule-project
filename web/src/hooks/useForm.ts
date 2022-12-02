@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 
 type useFormProps = {
-	initialValues : any,
-	onSubmit : (results : any) => void
-}
+  initialValues: any;
+  onSubmit: (results: any) => void;
+};
 
-const useForm = ({ initialValues, onSubmit } : useFormProps) => {
+const useForm = ({ initialValues, onSubmit }: useFormProps) => {
   const [values, setValues] = useState(initialValues || {});
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -25,7 +25,7 @@ const useForm = ({ initialValues, onSubmit } : useFormProps) => {
     formRendered.current = false;
   }, [initialValues]);
 
-  const handleBlur = (event : any) => {
+  const handleBlur = (event: any) => {
     const { target } = event;
     const { name } = target;
     setTouched({ ...touched, [name]: true });
@@ -33,7 +33,7 @@ const useForm = ({ initialValues, onSubmit } : useFormProps) => {
   };
 
   // Set any errors if applicable
-  const handleChange = (event : any) => {
+  const handleChange = (event: any) => {
     const { target } = event;
     const { name, value } = target;
     event.persist();
@@ -41,7 +41,7 @@ const useForm = ({ initialValues, onSubmit } : useFormProps) => {
   };
 
   // Set any errors if applicable and submit with onSubmit
-  const handleSubmit = (event : any) => {
+  const handleSubmit = (event: any) => {
     if (event) event.preventDefault();
     setErrors({ ...errors });
     onSubmit({ values, errors });

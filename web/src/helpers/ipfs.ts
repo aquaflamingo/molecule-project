@@ -1,4 +1,4 @@
-export function ensureIPFSPrefix(cidOrURI : string) {
+export function ensureIPFSPrefix(cidOrURI: string) {
   let uri = cidOrURI.toString();
   if (!uri.startsWith("ipfs://")) {
     uri = "ipfs://" + cidOrURI;
@@ -11,7 +11,7 @@ export function ensureIPFSPrefix(cidOrURI : string) {
   return uri;
 }
 
-export function removeIPFSPrefix(cidOrURI : string) {
+export function removeIPFSPrefix(cidOrURI: string) {
   if (cidOrURI.startsWith("ipfs://")) {
     return cidOrURI.slice("ipfs://".length);
   }
