@@ -50,6 +50,8 @@ contract Patent is ERC721URIStorage, Ownable {
         _mint(who, newItemId);
         _setTokenURI(newItemId, tokenURI);
 
+				delete brightlist[who];
+
         return newItemId;
     }
 }
