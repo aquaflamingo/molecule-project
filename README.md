@@ -6,21 +6,18 @@ Unfortunately, the full scope of the project was not completed in the set amount
 - ERC721 contract 
 	- add and remove from brightlist 
 	- brightlisting can only be performed by the owner
+	- removes from brightlist after mint
 - React application with Web3 provider injected 
 - Minting Form enforces schema for payload
 - Payload is encrypted, stores key in local storage and displays to end user
 - Encrypted payload is uploaded to IPFS 
 
 ### Did not finish
-- Getting a token to be minted with the `metadata.json`
-- Error handling and messaging for attempting to mint when not brightlisted (the contract reverts but the app does not show this)
-- Enforcement of only 1 NFT minted at a time
-	- This is a trivial addition on the contract's part (just deleting the address from the brightlist once you complete the mint)
 - The `tokenURI` request does not fit the schema exactly, I could not figure out how to get the token ID in the metadata that is stored in the token before the token was minted 
 - The system is not deployed to a public URL or on Goerli
 
 ### Additional Tasks 
-- Complete the missing functionality 
+- Better error handling and nicer UI
 - Clean up the types usage to improve code quality
 - Deploy the system to goerli and on a public hosting provider like heroku or aws 
 
