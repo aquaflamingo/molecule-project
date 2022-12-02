@@ -5,6 +5,7 @@ Unfortunately, the full scope of the project was not completed in the set amount
 ### Working 
 - ERC721 contract 
 	- add and remove from brightlist 
+	- brightlisting can only be performed by the owner
 - React application with Web3 provider injected 
 - Minting Form enforces schema for payload
 - Payload is encrypted, stores key in local storage and displays to end user
@@ -12,7 +13,7 @@ Unfortunately, the full scope of the project was not completed in the set amount
 
 ### Did not finish
 - Getting a token to be minted with the `metadata.json`
-- Completing the brightlisting form for the app to allow you to submit requests to remove and add addresses to the bright list
+- Error handling and messaging for attempting to mint when not brightlisted (the contract reverts but the app does not show this)
 - Enforcement of only 1 NFT minted at a time
 	- This is a trivial addition on the contract's part (just deleting the address from the brightlist once you complete the mint)
 - The `tokenURI` request does not fit the schema exactly, I could not figure out how to get the token ID in the metadata that is stored in the token before the token was minted 
