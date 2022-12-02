@@ -30,3 +30,9 @@ npx hardhat run scripts/deploy.js --network sepolia
 Ensure that the hardhat node is running via `make -C ../ hh.node`
 
 Then run tests via `yarn test`.
+
+## Exporting contract ABI
+- The `CONTRACT_EXPORT` value is set in the `package.json` file and links to the `lib` path at the top level of the directory 
+- We use `yarn link` for local development linking of the contracts
+
+

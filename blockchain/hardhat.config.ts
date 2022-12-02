@@ -12,7 +12,10 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: 0,
     tokenOwner: 0,
-  }
+  },
+	paths: {
+		 artifacts: '../web/src/artifacts',
+	}
 };
 
 export default config;

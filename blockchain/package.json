@@ -23,7 +23,10 @@
     "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
     "@openzeppelin/contracts": "^4.7.3"
   },
-  "scripts": {
+  "config": {
+		 "CONTRACT_EXPORT": "../lib/contracts/index.json"
+	},
+	"scripts": {
     "compile": "npx hardhat compile",
     "start:node": "npx hardhat node",
     "test": "npx hardhat test --network localhost",
