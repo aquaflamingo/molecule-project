@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useETHAccounts } from "../hooks/useEthers";
 import MintForm from "./MintForm"
+import { Container } from "react-bootstrap" 
 
 function App() {
   const account = useETHAccounts()[0];
@@ -20,18 +21,20 @@ function App() {
 	}
 
 	 return (
-		<div className="Web3App">
-			 <main>
-				{ account ? account : <p> No account </p> }
-				<MintForm onSuccess={onSuccess} />
+		<Container>
+			<div className="Web3App">
+				 <main>
+					{ account ? account : <p> No account </p> }
+					<MintForm onSuccess={onSuccess} />
 
-				{ success ? 
-					<div>
-						<input disabled type="text" name="encryption" value={key}/>
-						<button style={{backgroundColor: "#2FF58E"}} onClick={handleCopy}>Copy</button>
-					</div> : <br/> }
-			</main>		
-		</div>
+					{ success ? 
+						<div>
+							<input disabled type="text" name="encryption" value={key}/>
+							<button style={{backgroundColor: "#2FF58E"}} onClick={handleCopy}>Copy</button>
+						</div> : <br/> }
+				</main>		
+			</div>
+		</Container>
 	 )
 }
 

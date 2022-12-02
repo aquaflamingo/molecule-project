@@ -26,7 +26,7 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 			return
 		}
 
-		let p = { researcher: values.researcher, university: values.university, patent_filed: { patent_id: values.patent_id, institution: values.institution } }
+		let p = { researcher: values.researcher, university: values.university, patent_filed: { patent_id: values.patent_id, institution: values.institution }, cure: values.cure }
 
 		// TODO would go into mind flow
 		const isValid = validate(p)
@@ -40,7 +40,7 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 		// TODO error handle 
 		//
 		const encryptedPayload = JSON.stringify(p)
-		const metadata = {}
+		const metadata = {name: "Token", description: `This token can cure ${p.cure}`}
 		const mintPayload = { content: encryptedPayload, metadata: metadata }
 
 	  const elems = await mint(mintPayload);
@@ -56,7 +56,8 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 		researcher: "1234",
 		university: "1234",
 		patent_id: "A-12345/CUREABC",
-		institution: "1"
+		institution: "1",
+		cure: "test"
 	};
 
   const { values, errors, handleChange, handleSubmit } =
@@ -85,6 +86,7 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 							value={values.researcher}
 						/>	
 
+						<br/>
 					 <label>University</label>
 						<input
 							type="text"
@@ -93,6 +95,7 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 							onChange={handleChange}
 							value={values.university}
 						/>	
+						<br/>
 
 					 <label>PatentId</label>
 						<input
@@ -102,6 +105,7 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 							onChange={handleChange}
 							value={values.patent_id}
 						/>	
+						<br/>
 
 					 <label>Institution</label>
 						<input
@@ -111,6 +115,17 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 							onChange={handleChange}
 							value={values.institution}
 						/>	
+						<br/>
+
+					 <label>Cure</label>
+						<input
+							type="text"
+							name="cure"
+							required
+							onChange={handleChange}
+							value={values.cure}
+						/>	
+						<br/>
 						
 						<button type="submit" style={{backgroundColor: "#2FF58E"}}>Finish</button>
 					</div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Web3Connector from './components/Web3Connector';
 import Web3Provider from './components/Web3Provider';
