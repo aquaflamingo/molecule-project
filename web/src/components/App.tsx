@@ -16,8 +16,8 @@ function App() {
 		setKey(mintResult.encryptionKey)
 	}
 
-	const onBrightlistSuccess = () => {
-
+	const onBrightlistSuccess = (result : any) => {
+		alert(`${result.modification} was successful`)
 	}
 
 	const handleCopy = () => {

@@ -6,7 +6,7 @@ import { useModifyBrightlist } from "../hooks/useBrightlist";
 
 const BrightlistForm = ({ onSuccess } : any) => {
   const accounts = useETHAccounts();
-	const brightlistRequest = useModifyBrightlist()
+	const [brightlistRequest] = useModifyBrightlist()
 
 	const handleAddSubmit = async ({values, errors} : any) => {
 		console.log(values.addOrRemove)
@@ -15,12 +15,13 @@ const BrightlistForm = ({ onSuccess } : any) => {
 		if (values.addOrRemove.toLowerCase() == 'add' || values.addOrRemove.toLowerCase() == 'remove') {
 			const response = await brightlistRequest({modification: values.addOrRemove, address: values.address})
 
+			console.log("Success:", response)
 		} else {
 			alert("Bad operation, please use ADD or REMOVE")
 			return
 		}
 
-    onSuccess({ });
+    onSuccess({ modification: values.addOrRemove.toLowerCase() });
 	}
 
 
