@@ -42,8 +42,6 @@ const useMintFlow = (account : string) => {
 			const secret = generateSecret()
 			const encryptedContent = encrypt(ptContent, secret)
 
-			console.log("Encrypted content: ", encryptedContent) 
-			console.log("Password: ", secret)
       const uploadResult = await ipfsUploadRequest({
         basename: "patent",
         content: encryptedContent,

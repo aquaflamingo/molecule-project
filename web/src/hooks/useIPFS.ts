@@ -27,7 +27,7 @@ export const useIPFSContentUpload = () => {
 
 		const importCandidate = { 
 				path: "/nft/" + data.basename, 
-				content: "encrypted"
+				content: data.content
 			}
 
     const { cid: assetCid } = await ipfs!.add(
@@ -52,7 +52,7 @@ export const useIPFSContentUpload = () => {
       metadataURI: metadataURI,
       assetURI: assetURI,
     };
-  }, []);
+  }, [ipfs]);
 
   return upload;
 };
