@@ -1,5 +1,5 @@
 export type MintFormProps = {
-	onSuccess : () => void
+	onSuccess : (result : any) => void
 }
 
 export type HandleSubmitArgs = {
@@ -18,12 +18,12 @@ export type DraftPatent = {
 		patent_filed: PatentFiled
 }
 
-export type UploadData = {
-	draft: DraftPatent
-}
+// Token XYZ 
+// This token can cure XYZ
+export type UploadMetaData = {}
 
 export type IPFSUploadArgs = {
-	// FIXME: Blob
+	// FIXME: Encrypted blob
 	content: string
-	data: UploadData
+	metadata: UploadMetaData
 }

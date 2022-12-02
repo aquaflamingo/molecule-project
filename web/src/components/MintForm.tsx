@@ -5,19 +5,19 @@ import { useETHAccounts } from "../hooks/useEthers";
 import { hasKeys } from "../helpers/common"
 import { DraftPatent, MintFormProps, HandleSubmitArgs} from "../types" 
 
-const PatentFilingIdRegex = "[A-F]-[1-9]{5,7}\\/[A-Z]{5,9}"
+const PatentFilingIdRegex = "[A-F]-[1-9]{5,7}/[A-Z]{5,9}"
 
 const MintForm = ({ onSuccess } : MintFormProps) => {
   const accounts = useETHAccounts();
-  const [{ data, isLoading, error }, mint] = useMint(accounts[0]);
-
+  const [mint] = useMint(accounts[0]);
 
 	function validate (draft : DraftPatent): Boolean {
-		if (!draft.patent_filed.patent_id.match(PatentFilingIdRegex)) {
-			return false
+		// It has matched
+		if (draft.patent_filed.patent_id.match(PatentFilingIdRegex) != null) {
+			return true
 		}
 
-		return true
+		return false
 	}
 
 	const handleFormSubmit = async ({values, errors} : HandleSubmitArgs ) => {
@@ -37,33 +37,26 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
 			return
 		}
 
-		console.log(values)
-	}
+		// TODO error handle 
+		//
+		const encryptedPayload = JSON.stringify(p)
+		const metadata = {}
+		const mintPayload = { content: encryptedPayload, metadata: metadata }
 
-  // const onMint = async ({ values, errors }) => {
-		// // TODO
-    // // Trigger failure modal if any errors
-    // if (hasKeys(errors)) onFailure(errors);
-    //
-    // console.log("MintForm.onMint: ", values, errors);
-    //
-    // const record = drafteds.find(
-    //   (r) => r.id === parseInt(values.recordId)
-    // );
-    //
-    // const mintPayload = { data: record, content: md.fp };
-    //
-    // const [token, hash] = await mint(mintPayload);
-    //
-    // onSuccess({ token, hash });
-  // };
+	  const elems = await mint(mintPayload);
+		const token = elems![0] 
+		const hash = elems![1]
+		const secret = elems![2]
+
+    onSuccess({ token, hash, key: secret });
+	}
 
   // Default value is empty
   let initialValues = { 
-		researcher: "",
-		university: "",
-		patent_id: "",
-		institution: ""
+		researcher: "1234",
+		university: "1234",
+		patent_id: "A-12345/CUREABC",
+		institution: "1"
 	};
 
   const { values, errors, handleChange, handleSubmit } =
@@ -72,15 +65,14 @@ const MintForm = ({ onSuccess } : MintFormProps) => {
       onSubmit: handleFormSubmit,
     });
 
+        // {result.isLoading ? "Loading..." : ""}
+        // {result.data ? result.data.msg : ""}
+        // {result.error ? result.error : ""}
   return (
 		<div>
 			<h1>Mint Form</h1>
       <div className="submit-result">
-        // {isLoading ? "Loading..." : ""}
-        // {data ? data.msg : ""}
-        // {error ? error : ""}
       </div>
-
 			<div>
 				<form onSubmit={handleSubmit}>
 					<div>

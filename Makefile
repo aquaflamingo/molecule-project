@@ -17,3 +17,14 @@ hh.compile:
 
 hh.deploy.local:
 	@pushd blockchain; yarn deploy:local; popd
+
+###############################################################
+# IPFS
+###############################################################
+ipfs.start:
+	@echo "Running IPFS daemon in --offline mode"
+	@./ipfsd.sh
+
+ipfs.clean:
+	@./ipfsclean.sh
+	@echo "Done"

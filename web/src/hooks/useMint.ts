@@ -1,30 +1,26 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { useEthersJs } from "./useEthers";
-import { useIPFSContentUpload } from "./useIPFS";
+import { useIPFSContentUpload, useIPFS } from "./useIPFS";
 import { removeIPFSPrefix } from "../helpers/ipfs";
 import { IPFSUploadArgs } from "../types"
-
-// TODO
-import Artifacts from "@molecule/contracts";
-
-const Patent = Artifacts.contracts.Patent;
+import Patent from "../artifacts/contracts/Patent.sol/Patent.json";
+import PatentDeployment from "../artifacts/deploy.json";
+import { encrypt, generateSecret } from "../helpers/crypto";
 
 const useContract = () => {
   const ethersjsInstance = useEthersJs();
-  const [contract, setContract] = useState([]);
+  const [contract, setContract] = useState<Contract>();
 
   useEffect(() => {
     if (ethersjsInstance === null) return;
 
     const c = new ethers.Contract(
-      Patent.address,
+      PatentDeployment.address,
       Patent.abi,
-			// TODO: ownable
       ethersjsInstance?.getSigner(0)
     );
 
-		// FIXME:
     setContract(c);
   }, [ethersjsInstance]);
 
@@ -37,34 +33,38 @@ const useMintFlow = (account : string) => {
   const ipfsUploadRequest = useIPFSContentUpload();
 
   const request = useCallback(
-    async ({ data, content } : IPFSUploadArgs) => {
+    async ({ metadata, content } : IPFSUploadArgs) => {
       if (ethersjsInstance === null || ipfsUploadRequest === null) return;
 
       console.log("Mint request received, starting upload...");
 
-			// FIXME: encrypt
+			const ptContent = JSON.stringify(content)
+			const secret = generateSecret()
+			const encryptedContent = encrypt(ptContent, secret)
+
+			console.log("Encrypted content: ", encryptedContent) 
+			console.log("Password: ", secret)
       const uploadResult = await ipfsUploadRequest({
         basename: "patent",
-				// FIXME: encrypted
-        content: content,
+        content: encryptedContent,
         metadata: {
-					...data.draft
+					...metadata
         },
       });
 
       console.log(
         "Storage upload completed. URI: ",
-        uploadResult.assetURI,
+        uploadResult!.assetURI,
         "Metadata URI:",
-        uploadResult.metadataURI,
+        uploadResult!.metadataURI,
         "Starting token mint..."
       );
 
       // Strip the IPFS prefix which is appended to the metadataURI.
       //
-      const tokenMetadata = removeIPFSPrefix(uploadResult.metadataURI);
+      const tokenMetadata = removeIPFSPrefix(uploadResult!.metadataURI);
 
-      const tx = await contract.mint(account, tokenMetadata);
+      const tx = await contract!.mint(account, tokenMetadata);
 
       // The transaction receipt contains events emitted while processing the transaction.
       const receipt = await tx.wait();
@@ -74,16 +74,17 @@ const useMintFlow = (account : string) => {
 
       console.log("Successfully minted the token");
 
-      return [erc721Token, tx.hash];
+      return [erc721Token, tx.hash, secret];
     },
-    [ethersjsInstance, createMintEventRequest, ipfsUploadRequest]
+    [ethersjsInstance, ipfsUploadRequest]
   );
-  return [createEventResult, request];
+
+  return [request];
 };
 
 export default useMintFlow;
 
-const parseMintTxResponse = (receipt, storageInformation) => {
+const parseMintTxResponse = (receipt :any, storageInformation : any) => {
   console.log(
     "Token mint requested, received response.",
     "Filtering ",
@@ -103,9 +104,9 @@ const parseMintTxResponse = (receipt, storageInformation) => {
       "id:",
       tokenId,
       "assetURI:",
-      storageInformation.assetURI,
+      removeIPFSPrefix(storageInformation.assetURI),
       "metadataURI:",
-      storageInformation.metadataURI
+      removeIPFSPrefix(storageInformation.metadataURI)
     );
 
     // return token id, asset and metadata
